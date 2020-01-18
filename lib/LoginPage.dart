@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
-
 import 'package:flutter_school/ParentsPage.dart';
-
 import 'package:flutter_school/TeacherPage.dart';
-
 import 'package:flutter_school/AdminPage.dart';
-
+import 'package:fade/fade.dart';
 class LoginPage extends StatefulWidget {
   final String logo;
 
@@ -17,15 +14,13 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-
+  bool visible = true;
   var _loginName = ['Teacher', 'Parents', 'Admin'];
   final _minpadding = 5.0;
   var _currentItemSelected = 'Admin';
 
   TextEditingController nameController = TextEditingController();
-
   TextEditingController pswdController = TextEditingController();
-
   String _password;
 
   @override
@@ -45,6 +40,33 @@ class _LoginPageState extends State<LoginPage> {
 //          (Route<dynamic> route) => false);
 //    }
 //  }
+  Widget password() {
+    return AnimatedOpacity(
+      opacity: visible? 1.0 : 0.0,
+      duration: Duration(milliseconds: 500 ),
+      child: TextFormField(
+        controller: pswdController,
+        obscureText: true,
+        decoration: InputDecoration(
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(30.0)),
+          ),
+          prefixIcon: Icon(Icons.lock),
+          hintText: 'Enter Your Password',
+          labelText: 'Password',
+        ),
+        // ignore: missing_return
+        validator: (value) {
+          if (value.isEmpty) {
+            return 'Please Enter Password';
+          } else if (value.length < 6) {
+            return 'Invalid Password';
+          }
+        },
+        onSaved: (value) => _password = value,
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -61,10 +83,42 @@ class _LoginPageState extends State<LoginPage> {
                   Padding(
                     padding: EdgeInsets.only(top: 50.0),
                     child:
-                        Image.network(widget.logo, height: 100.0, width: 100.0),
+                    Image.network(widget.logo, height: 100.0, width: 100.0),
                   ),
                   Padding(
                     padding: EdgeInsets.only(top: _minpadding * 20),
+                    child: FormField(
+                      builder: (FormFieldState state) {
+                        return InputDecorator(
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(
+                              borderRadius:
+                              BorderRadius.all(Radius.circular(30.0)),
+                            ),
+                            prefixIcon: Icon(Icons.perm_identity),
+                            hintText: "Login As",
+                          ),
+                          child: DropdownButtonHideUnderline(
+                            child: DropdownButton<String>(
+                              isDense: true,
+                              items: _loginName.map((String value) {
+                                return DropdownMenuItem<String>(
+                                  value: value,
+                                  child: Text(value),
+                                );
+                              }).toList(),
+                              value: _currentItemSelected,
+                              onChanged: (String newValueSelected) {
+                                _onDropDownItemSelected(newValueSelected);
+                                },
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(top: _minpadding * 3),
                     child: TextFormField(
                       controller: nameController,
                       decoration: InputDecoration(
@@ -85,60 +139,8 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   Padding(
                     padding: EdgeInsets.only(top: _minpadding * 3),
-                    child: TextFormField(
-                      controller: pswdController,
-                      obscureText: true,
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(30.0)),
-                        ),
-                        prefixIcon: Icon(Icons.lock),
-                        hintText: 'Enter Your Password',
-                        labelText: 'Password',
-                      ),
-                      // ignore: missing_return
-                      validator: (value) {
-                        if (value.isEmpty) {
-                          return 'Please Enter Password';
-                        } else if (value.length < 6) {
-                          return 'Invalid Password';
-                        }
-                      },
-                      onSaved: (value) => _password = value,
+                    child: password(),
                     ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(top: _minpadding * 3),
-                    child: FormField(
-                      builder: (FormFieldState state) {
-                        return InputDecorator(
-                          decoration: InputDecoration(
-                            border: OutlineInputBorder(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(30.0)),
-                            ),
-                            prefixIcon: Icon(Icons.perm_identity),
-                            hintText: "Login As",
-                          ),
-                          child: DropdownButtonHideUnderline(
-                            child: DropdownButton<String>(
-                              isDense: true,
-                              items: _loginName.map((String value) {
-                                return DropdownMenuItem<String>(
-                                  value: value,
-                                  child: Text(value),
-                                );
-                              }).toList(),
-                              value: _currentItemSelected,
-                              onChanged: (String newValueSelected) {
-                                _onDropDownItemSelected(newValueSelected);
-                              },
-                            ),
-                          ),
-                        );
-                      },
-                    ),
-                  ),
                   Padding(
                       padding: EdgeInsets.only(top: _minpadding * 3),
                       child: Container(
@@ -168,6 +170,7 @@ class _LoginPageState extends State<LoginPage> {
                               if (_formKey.currentState.validate()) {
 //                                SharedPreferences pref = await SharedPreferences.getInstance();
 //                                  pref.setBool('isLogin', true);
+
                                 var route = MaterialPageRoute(
                                   builder: (BuildContext context) =>
                                       ParentsPage(),
@@ -223,6 +226,10 @@ class _LoginPageState extends State<LoginPage> {
   void _onDropDownItemSelected(String newValueSelected) {
     setState(() {
       this._currentItemSelected = newValueSelected;
+      if(_currentItemSelected =='Parents') {
+        visible = !visible;
+      }
+
     });
   }
 }

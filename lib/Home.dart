@@ -21,7 +21,7 @@ class _homeState extends State<home> {
 
   Future<String> getJSONdata() async {
     var response =
-        await http.get(Uri.encodeFull(url), headers: {"auth": "Trizinno2019"});
+    await http.get(Uri.encodeFull(url), headers: {"auth": "Trizinno2019"});
     print(response.body);
 
     setState(() {
@@ -61,81 +61,81 @@ class _homeState extends State<home> {
   Widget build(BuildContext context) {
     return Scaffold(
         body: Center(
-      child: Form(
-        key: this._formKey,
-        child: Padding(
-          padding: EdgeInsets.all(_minpadding * 7),
-          child: ListView(
-            children: <Widget>[
-              Padding(
-                padding: EdgeInsets.all(_minpadding * 2),
-                child: Image.asset(
-                  'assets/images/logo.jpg',
-                  width: 100.0,
-                  height: 100.0,
-                ),
-              ),
-              Padding(
-                  padding: EdgeInsets.only(top: _minpadding),
-                  child: Center(
-                    child: Text(
-                      'Academic',
-                      style: TextStyle(
-                          inherit: true,
-                          fontSize: 50.0,
-                          fontWeight: FontWeight.bold,
-                          fontFamily: 'FredokaOne-Regular',
-                          shadows: [
-                            Shadow(
-                                color: Colors.black12,
-                                blurRadius: 3.0,
-                                offset: Offset(5.0, 5.0))
-                          ],
-                          color: Colors.teal),
+          child: Form(
+            key: this._formKey,
+            child: Padding(
+              padding: EdgeInsets.all(_minpadding * 7),
+              child: ListView(
+                children: <Widget>[
+                  Padding(
+                    padding: EdgeInsets.all(_minpadding * 2),
+                    child: Image.asset(
+                      'assets/images/logo.jpg',
+                      width: 100.0,
+                      height: 100.0,
                     ),
-                  )),
-              Padding(
-                padding: EdgeInsets.only(top: _minpadding * 30),
-                child: TypeAheadFormField(
-                    textFieldConfiguration: TextFieldConfiguration(
-                      autofocus: true,
-                      controller: this._typeAheadController,
-                      decoration: InputDecoration(
-                          border: OutlineInputBorder(
-                            borderRadius:
+                  ),
+                  Padding(
+                      padding: EdgeInsets.only(top: _minpadding),
+                      child: Center(
+                        child: Text(
+                          'Academic',
+                          style: TextStyle(
+                              inherit: true,
+                              fontSize: 50.0,
+                              fontWeight: FontWeight.bold,
+                              fontFamily: 'FredokaOne-Regular',
+                              shadows: [
+                                Shadow(
+                                    color: Colors.black12,
+                                    blurRadius: 3.0,
+                                    offset: Offset(5.0, 5.0))
+                              ],
+                              color: Colors.teal),
+                        ),
+                      )),
+                  Padding(
+                    padding: EdgeInsets.only(top: _minpadding * 30),
+                    child: TypeAheadFormField(
+                        textFieldConfiguration: TextFieldConfiguration(
+                          autofocus: true,
+                          controller: this._typeAheadController,
+                          decoration: InputDecoration(
+                              border: OutlineInputBorder(
+                                borderRadius:
                                 BorderRadius.all(Radius.circular(30.0)),
-                          ),
-                          prefixIcon: Icon(Icons.school),
-                          hintText: 'Select Your School'),
-                    ),
-                    debounceDuration: const Duration(milliseconds: 300),
-                    suggestionsCallback: (pattern) {
-                      return data;
-                    },
-                    itemBuilder: (context, suggestion) {
-                      return ListTile(title: Text(suggestion['SCHOOL_NAME']));
-                    },
-                    transitionBuilder: (context, suggestionsBox, controller) {
-                      return suggestionsBox;
-                    },
-                    onSuggestionSelected: (suggestion) {
-                      this._typeAheadController.text =
+                              ),
+                              prefixIcon: Icon(Icons.school),
+                              hintText: 'Select Your School'),
+                        ),
+                        debounceDuration: const Duration(milliseconds: 300),
+                        suggestionsCallback: (pattern) {
+                          return data;
+                        },
+                        itemBuilder: (context, suggestion) {
+                          return ListTile(title: Text(suggestion['SCHOOL_NAME']));
+                        },
+                        transitionBuilder: (context, suggestionsBox, controller) {
+                          return suggestionsBox;
+                        },
+                        onSuggestionSelected: (suggestion) {
+                          this._typeAheadController.text =
                           suggestion['SCHOOL_NAME'];
-                      if (this._typeAheadController.text ==
-                          suggestion['SCHOOL_NAME']) {
-                        var route = MaterialPageRoute(
-                            builder: (BuildContext context) =>
-                                LoginPage(logo: suggestion['SCHOOL_LOGO']));
-                        Navigator.of(context).push(route);
-                      }
-                    },
-                    // ignore: missing_return
-                    validator: (value) {
-                      if (value.isEmpty) {
-                        return 'Please Select a School';
-                      }
-                    }),
-              ),
+                          if (this._typeAheadController.text ==
+                              suggestion['SCHOOL_NAME']) {
+                            var route = MaterialPageRoute(
+                                builder: (BuildContext context) =>
+                                    LoginPage(logo: suggestion['SCHOOL_LOGO']));
+                            Navigator.of(context).push(route);
+                          }
+                        },
+                        // ignore: missing_return
+                        validator: (value) {
+                          if (value.isEmpty) {
+                            return 'Please Select a School';
+                          }
+                        }),
+                  ),
 //              Padding(
 //                  padding: EdgeInsets.only(top: _minpadding * 3),
 //                  child: Container(
@@ -176,11 +176,11 @@ class _homeState extends State<home> {
 //                            Navigator.of(context).push(route);
 //                          }
 //                        }),
-            ],
+                ],
+              ),
+            ),
           ),
-        ),
-      ),
-    ));
+        ));
   }
 
   void _navigator() async {
@@ -191,7 +191,7 @@ class _homeState extends State<home> {
       Navigator.of(context).pushAndRemoveUntil(
           new MaterialPageRoute(
               builder: (BuildContext context) => new LoginPage()),
-          (Route<dynamic> route) => false);
+              (Route<dynamic> route) => false);
     } else {
 //      SharedPreferences pref = await SharedPreferences.getInstance();
 //      pref.setBool("isLogin", false);
